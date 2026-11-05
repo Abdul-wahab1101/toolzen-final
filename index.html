@@ -37,7 +37,7 @@
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-const BASE='https://abdul-wahab1101.github.io/toolzen-tools/';
+const BASE = new URL('./', window.location.href).href;
 const tools=[
 ['compress','Image Compressor','Compress JPG, PNG and WebP to a target size from 20 KB to 5 MB.','🗜️','image','image-compressor','compress-image-to-50kb'],
 ['resize','Image Resizer','Resize images to custom pixel dimensions.','📐','image','image-resizer'],
