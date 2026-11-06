@@ -1,48 +1,64 @@
-TOOLZEN — PROFESSIONAL UPGRADE PACKAGE
-======================================
+TOOLZEN — SIGNATURE UI REDESIGN PACKAGE
+=======================================
 
-Is package mein website ki root-level files hain. Main design, CSS aur JavaScript index.html mein hain. Alag assets folder ki zaroorat nahi.
+Is package mein ToolZen ka premium visual redesign hai. Existing tool processing JavaScript aur SEO/property files preserve ki gayi hain.
 
-FILES
-1. index.html — website, 30 tools, advanced controls, previews, CV templates, scanner, PDF/image processing.
-2. 404.html — branded not-found page with correct homepage link.
-3. robots.txt — crawler instructions and sitemap URL.
-4. sitemap.xml — currently homepage URL only while Search Console fetch is being diagnosed.
-5. og-image.png — social sharing preview image.
-6. google2ae6bf0d4b10570a.html — Google Search Console ownership verification file. Do not delete it.
-7. README-ROMAN-URDU.txt — these instructions.
+DESIGN UPDATE
+- Premium dark navy base with refined violet and cyan accents.
+- Redesigned top navigation and responsive mobile menu.
+- New hero section with workspace preview, trust markers and clearer calls to action.
+- Refined tool library, search field, filters and 30 responsive tool cards.
+- Cleaner tool workspaces, file drop zones, settings, outputs, progress and messages.
+- Improved feature section, typography, spacing, buttons, focus states and 404 page.
+- Keyboard shortcut: Ctrl+K / Cmd+K or / focuses tool search.
+- Reduced-motion preference is respected.
 
-FEATURE UPGRADES
-- Image Compressor: 20 KB–5 MB target, quality preference, best-effort warning, before/after comparison and batch ZIP.
-- Image Resizer: custom dimensions, aspect-ratio lock, social media/photo presets, quality control, batch ZIP.
-- Image Converter: JPG, PNG, WebP, quality control, JPG background colour and batch ZIP.
-- PDF: image-to-PDF, merge with drag/drop file order and per-file page ranges, split selected pages, rotate selected pages, page previews, PDF-to-JPG, information, watermark and structural re-save optimization.
-- CV Maker: five templates, live preview, optional profile photo, languages, links and A4 PDF export.
-- Document Scanner: multiple pages from images/camera, A4 PDF, crop margin and colour/grayscale/black-and-white filters.
-- Shared UX: drag/drop upload, selected-file preview, reset controls, progress/status, clearer errors, download and native file-share option.
+FUNCTIONS PRESERVED
+- All 30 tool routes and tool-specific processing controls remain in the existing JavaScript.
+- Image compressor, resizer and converter batch controls are preserved.
+- PDF page preview/selection, merge/reorder and related tools are preserved.
+- CV Maker five-template live preview is preserved.
+- Scanner, image/PDF conversion and download/share UI are preserved.
+- Google Search Console ownership verification file, robots.txt, sitemap.xml and OG image are included.
 
-IMPORTANT LIMITATIONS — PLEASE READ
-- Selected files are processed in the browser; ToolZen does not have a file-upload endpoint in this static build. Some open-source processing libraries are fetched from public CDNs on first use, so those specific tools need an internet connection.
-- Image compression uses best effort. Some images cannot reach very small targets without noticeable quality/dimension loss.
-- PDF structural optimization does not downsample embedded photos; file-size reduction is not guaranteed.
-- PDF to Word extracts selectable text only; complex layout, images, tables and scanned-page OCR are not preserved.
-- Word to PDF may alter complex DOCX layouts; always review the exported PDF.
-- Document Scanner supports multiple pages, manual crop margin and filters. Automatic perspective/edge detection and OCR are not included.
-- Share file uses the browser/device share sheet where supported. WhatsApp shares the public tool page, not a hosted file. Direct Google Drive API upload is not included.
-- The Google verification HTML file is required to keep the Search Console HTML-file ownership verification valid; do not remove it.
-- The sitemap currently lists only the homepage while the Search Console fetch issue is being checked. Do not claim that all tool URLs are indexed.
+TESTS RUN ON THIS BUILD
+- JavaScript syntax check passed.
+- HTML parsed; no duplicate static IDs found.
+- All 30 tool workspaces initialized without browser JavaScript errors.
+- Homepage cards: 30 rendered.
+- Search and PDF category filter checked.
+- CV preview live update and reset checked.
+- Image resizer preset checked (YouTube 1280 x 720).
+- Real sample JPEG processed with Image Compressor; downloadable WebP output rendered.
+- Close-to-home flow checked in browser test harness.
+- Mobile menu checked.
+- No horizontal overflow at 320, 360, 390, 430, 768, 820, 1024, 1280 and 1440 px widths.
 
-DEPLOY TO THE EXISTING CLOUDFLARE PAGES PROJECT
+LIMITATIONS TO KEEP IN MIND
+- Browser tests do not prove every file format and every device/browser combination.
+- PDF/CV/DOCX features load libraries from public CDNs when used. CDN fetch failed in this isolated test environment, so those export paths could not be fully end-to-end verified here. They need an internet connection in normal use.
+- PDF-to-Word extracts selectable text only; complex layout, tables, images and scanned-page OCR are not preserved.
+- Word-to-PDF may alter complex DOCX layouts; review the exported PDF.
+- PDF structural optimization does not downsample embedded images; size reduction is not guaranteed.
+- Document Scanner supports multiple pages, manual crop margin and filters; OCR and automatic perspective/edge detection are not included.
+- WhatsApp shares the public tool page; it does not host a processed file. Native file sharing depends on browser/device support.
+- Sitemap currently lists homepage only while the Search Console fetch issue is being diagnosed. This does not mean all tool URLs are indexed.
+
+SAFE DEPLOYMENT TO EXISTING CLOUDFLARE PAGES
 1. ZIP ko Windows mein right-click karke Extract All karo.
-2. Extracted folder kholo. Andar wali files select karo (folder itself nahi).
-3. GitHub repo kholo: https://github.com/Abdul-wahab1101/toolzen-final
-4. Add file -> Upload files.
-5. Extracted files drag/drop karo. Existing same-name files overwrite/replace karo.
-6. Commit changes karo.
-7. Cloudflare Dashboard -> Workers & Pages -> toolzen-final -> Deployments mein latest deployment Success hone do.
-8. Live site kholo: https://toolzen-final.pages.dev/ and Ctrl+Shift+R se hard refresh karo.
+2. Extracted folder kholo: toolzen-final-main.
+3. Folder ke andar ki saari files select karo (folder itself nahi).
+4. GitHub repo kholo: https://github.com/Abdul-wahab1101/toolzen-final
+5. Add file -> Upload files.
+6. Extracted files drag/drop karo. Existing same-name files replace/overwrite karo.
+7. Commit changes karo.
+8. Cloudflare Dashboard -> Workers & Pages -> toolzen-final -> Deployments mein latest deployment ka Success status check karo.
+9. Live site kholo: https://toolzen-final.pages.dev/ and Ctrl+Shift+R se hard refresh karo.
+10. Pehle homepage, Image Compressor, CV Maker aur mobile menu test karo. Uske baad baqi tools test karo.
 
-SAFETY
+IMPORTANT SAFETY NOTES
 - ZIP file ko GitHub par khud upload mat karna; extracted files upload karni hain.
-- index.html, robots.txt, sitemap.xml, 404.html aur Google verification file repository ke root mein rehni chahiye.
-- Pehle Cloudflare deployment successful hone do. Live site verify kiye baghair apni purani working deployment delete mat karna.
+- google2ae6bf0d4b10570a.html ko delete mat karna; ownership verification ke liye zaroori hai.
+- index.html, robots.txt, sitemap.xml, 404.html aur verification HTML repo ke root mein rehni chahiye.
+- Live version test kiye baghair purani deployment rollback/delete mat karna.
+- Design upgrade se domain/hosting change nahi hota; public URL yahi rahega: https://toolzen-final.pages.dev/
