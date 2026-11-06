@@ -41,7 +41,8 @@ ${JSON.stringify(data)}`;
       method: "POST",
       headers: { "authorization": `Bearer ${env.GROQ_API_KEY}`, "content-type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "qwen/qwen3.8-27b",
+        reasoning_effort: "none",
         messages: [
           { role: "system", content: "You are a careful professional CV editor. Follow the user's facts exactly and never fabricate credentials or experience." },
           { role: "user", content: prompt }
@@ -56,7 +57,12 @@ ${JSON.stringify(data)}`;
   }
   const result = await upstream.json().catch(() => ({}));
   if (!upstream.ok) {
-    return new Response(JSON.stringify({ error: upstream.status === 429 ? "AI service is busy or its free usage limit has been reached. Try again later." : "AI provider could not complete this request. Please try again later." }), { status: upstream.status === 429 ? 429 : 502, headers: JSON_HEADERS });
+    const providerMessage = String(result.error?.message || "").toLowerCase();
+    let message = "AI service could not complete this request. Please try again.";
+    if (upstream.status === 401 || upstream.status === 403) message = "AI key is invalid or not active. Check the GROQ_API_KEY secret in Cloudflare.";
+    else if (upstream.status === 429) message = "AI free usage limit is reached or the service is busy. Please wait and try again.";
+    else if (upstream.status === 400 && (providerMessage.includes("model") || providerMessage.includes("decommission") || providerMessage.includes("retired"))) message = "AI model configuration needs an update. Please contact the site owner.";
+    return new Response(JSON.stringify({ error: message }), { status: upstream.status === 429 ? 429 : 502, headers: JSON_HEADERS });
   }
   const content = result.choices?.[0]?.message?.content;
   let draft;
