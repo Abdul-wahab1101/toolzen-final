@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://abdul-wahab1101.github.io/toolzen-tools/sitemap.xml
+
+Sitemap: https://toolzen-final.pages.dev/sitemap.xml
