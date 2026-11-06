@@ -449,7 +449,51 @@ async function runPdfTool(id,files){const PDFLib=await getPdfLib(),{PDFDocument,
 }
 
 
-async function makeCV(){const v=id=>$(id)?.value.trim()||'';if(!v('fullName'))throw Error('Enter your name first.');if(v('cvEmail')&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('cvEmail')))throw Error('Enter a valid email address or leave the email field blank.');await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',()=>typeof html2pdf==='function');renderCV();const blob=await html2pdf().set({margin:8,filename:'ToolZen-CV.pdf',image:{type:'jpeg',quality:.96},html2canvas:{scale:1.7,backgroundColor:'#fff',useCORS:false,letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from($('cvPreview')).outputPdf('blob');if(!blob||blob.size<1000)throw Error('CV export did not produce a valid PDF. Check your details and try again.');addOutput(blob,'ToolZen-CV.pdf','Professional A4 CV exported in your selected template. Review every detail before applying.')}
+async function makeCV(){
+ const v=id=>$(id)?.value?.trim()||'';
+ if(!v('fullName'))throw Error('Enter your name first.');
+ if(v('cvEmail')&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v('cvEmail')))throw Error('Enter a valid email address or leave the email field blank.');
+ const sections=[
+  ['PROFILE',v('cvSummary')],
+  ['WORK EXPERIENCE',v('cvExperience')],
+  ['EDUCATION',v('cvEducation')],
+  ['SKILLS',v('cvSkills')],
+  ['LANGUAGES',v('cvLanguages')]
+ ].filter(x=>x[1]);
+ if(!sections.length&&!v('cvRole')&&!v('cvEmail')&&!v('cvPhone')&&!v('cvLocation'))throw Error('Add at least one CV detail before downloading.');
+ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',()=>!!(window.jspdf&&window.jspdf.jsPDF));
+ const {jsPDF}=window.jspdf;
+ const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
+ const pageW=210,pageH=297,left=18,right=18,maxW=pageW-left-right;
+ let y=22;
+ const clean=s=>String(s||'').replace(/[•●▪]/g,'-').replace(/\r/g,'').trim();
+ const addText=(text,size=10,style='normal',color=[48,61,80],gap=1.4)=>{
+  doc.setFont('helvetica',style);doc.setFontSize(size);doc.setTextColor(...color);
+  const lines=doc.splitTextToSize(clean(text),maxW);
+  for(const line of lines){
+   if(y>pageH-18){doc.addPage();y=20}
+   doc.text(line,left,y);y+=size*0.42+gap;
+  }
+  y+=1.5;
+ };
+ const addHeading=(label)=>{
+  if(y>pageH-28){doc.addPage();y=20}
+  y+=2;doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(39,67,91);doc.text(label,left,y);y+=2;
+  doc.setDrawColor(205,216,229);doc.line(left,y,pageW-right,y);y+=6;
+ };
+ doc.setFillColor(24,40,69);doc.rect(0,0,pageW,48,'F');
+ doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(255,255,255);
+ doc.text(doc.splitTextToSize(clean(v('fullName')),maxW),left,23);
+ doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(210,222,240);
+ if(v('cvRole'))doc.text(doc.splitTextToSize(clean(v('cvRole')),maxW),left,31);
+ const contact=[v('cvEmail'),v('cvPhone'),v('cvLocation'),v('cvLinks')].filter(Boolean).join('  |  ');
+ if(contact){doc.setFontSize(8.5);doc.text(doc.splitTextToSize(clean(contact),maxW),left,40)}
+ y=61;
+ for(const [heading,content] of sections){addHeading(heading);addText(content,9.5,'normal',[48,61,80],1.5)}
+ const blob=doc.output('blob');
+ if(!blob||blob.size<1200)throw Error('CV PDF could not be created. Please try again.');
+ addOutput(blob,'ToolZen-CV.pdf','Your CV PDF has been generated with selectable text. Open it and review all details before applying.');
+}
 
 
 async function convertPdfWord(){const f=currentFiles[0];if(f.size>25*1024*1024)throw Error('Choose a PDF under 25 MB.');const pdfjs=await getPdfJs();const doc=await pdfjs.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise;if(doc.numPages>100)throw Error('Maximum 100 pages in this browser version.');let texts=[];for(let n=1;n<=doc.numPages;n++){const p=await doc.getPage(n),tc=await p.getTextContent();texts.push(tc.items.map(x=>x.str).filter(Boolean).join(' '))}if(!texts.join('').trim())throw Error('No selectable text found. Scanned PDFs need OCR, which is not included.');const ps=texts.map((t,i)=>`<w:p><w:r><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>${i<texts.length-1?'<w:p><w:r><w:br w:type="page"/></w:r></w:p>':''}`).join('');const xml=`<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${ps}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>`;const docx=await makeZipBlob([{name:'[Content_Types].xml',data:'<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'},{name:'_rels/.rels',data:'<?xml version="1.0"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'},{name:'word/document.xml',data:xml}]);addOutput(docx,f.name.replace(/\.pdf$/i,'')+'.docx','Selectable text exported to DOCX. Original layout, tables and images are not preserved.')}
