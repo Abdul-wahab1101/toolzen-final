@@ -1,12 +1,17 @@
-TOOLZEN SIGNATURE REDESIGN — QUICK DEPLOY
+TOOLZEN — 91 TOOLS UPGRADE: QUICK DEPLOY
 
-1) Extract this ZIP on Windows.
-2) Open toolzen-final-main and select all files inside it.
-3) GitHub: https://github.com/Abdul-wahab1101/toolzen-final
-4) Add file -> Upload files -> upload the extracted files (not the ZIP).
-5) Commit changes.
-6) Wait for Cloudflare Pages latest deployment to show Success.
-7) Open https://toolzen-final.pages.dev/ and hard-refresh with Ctrl+Shift+R.
-8) Test the homepage, Image Compressor, CV Maker and mobile menu first.
+1. Extract this ZIP on Windows (right-click -> Extract All).
+2. Open the extracted toolzen-final-main folder.
+3. Select ALL files inside the folder. Upload those files, not the folder or ZIP.
+4. Open GitHub repo: https://github.com/Abdul-wahab1101/toolzen-final
+5. Add file -> Upload files -> drag/drop the extracted files.
+6. Commit changes.
+7. Cloudflare Dashboard -> Workers & Pages -> toolzen-final -> Deployments: wait for latest status Success.
+8. Open https://toolzen-final.pages.dev/ and hard-refresh with Ctrl+Shift+R.
+9. Read README-ROMAN-URDU.txt for the 61 new tools, test results, known limitations and safe deployment notes.
 
-Do not delete google2ae6bf0d4b10570a.html. Full checks and known limitations are in README-ROMAN-URDU.txt.
+IMPORTANT:
+- Do NOT delete google2ae6bf0d4b10570a.html (Google Search Console ownership verification).
+- Keep robots.txt, sitemap.xml, 404.html and og-image.png in the repository root.
+- Do not delete/rollback the previous Cloudflare deployment before checking the new site.
+- No paid API is required by design for the new tools. Several features load public CDN libraries and need an internet connection on first use.

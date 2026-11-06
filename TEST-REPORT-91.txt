@@ -1,0 +1,46 @@
+TOOLZEN 91-TOOL RELEASE — TEST REPORT
+====================================
+Date: 2026-11-06
+Build: 30 existing tools + 61 new tools = 91 total tool routes/cards
+
+AUTOMATED CHECKS
+----------------
+PASS — JavaScript syntax: new-tools source and final inline application script.
+PASS — HTML parser: final index.html parses successfully.
+PASS — Tool catalog: 91 tool definitions/cards detected.
+PASS — Workspace initialization: all 91 tool workspaces opened in browser test harness.
+PASS — Workspace structure: no missing expected run/reset controls and no duplicate workspace IDs reported.
+PASS — Browser console: no uncaught page errors during the 91-workspace initialization pass.
+PASS — Responsive layout: no horizontal overflow at tested widths 320, 360, 390, 430, 768, 820, 1024, 1280 and 1440 CSS pixels.
+PASS — Search/category filter, menu, close-to-home and reset flows in test harness.
+PASS — Actual sample JPEG processing in earlier compressor integration test and downloadable output UI.
+
+SAMPLED FUNCTIONAL OPERATIONS
+-----------------------------
+The harness successfully exercised output paths for: Password Generator, Password Strength Checker,
+Notepad graceful fallback, Random Picker, BMI, Age, Unit Converter, GST, Percentage, Discount,
+Profit/Loss, Loan Estimate, Electricity Estimate, Date Difference, Time Duration, Salary, VAT,
+Tip, Word Counter, Case Converter, Duplicate Line Removal, Text Diff, Lorem Ipsum, Markdown,
+JSON formatting, Base64, JSON-to-CSV, CSV-to-JSON, URL encode/decode, UUID, SHA-256 path,
+Timestamp, Regex Worker, JWT decoding, Color Palette, CSS Gradient, Box Shadow, Contrast,
+HEX/RGB conversion, Border Radius, Button CSS, Glassmorphism CSS and Document Text Compare.
+
+TEST HARNESS CAVEATS
+--------------------
+- Some isolated tests stubbed browser/CDN-provided dependencies (formatter and cryptographic API) to verify the application call path and output rendering. Those stubs are not the production libraries.
+- The environment could not resolve some external CDN hosts, so these features were NOT fully end-to-end verified against their live dependencies here: QR library generation/scanning, js-beautify formatters, QPDF WASM password operations, PDF.js/pdf-lib file transformations, Tesseract OCR, SheetJS/html2pdf spreadsheet conversion and TTS voice availability.
+- File-specific tests do not cover every malformed file, maximum-size file, browser/device, language, or memory condition.
+- “91/91 workspaces initialized” confirms the UI route/control initialization only; it is not a claim that every third-party library operation and every export format has been exhaustively tested.
+
+KNOWN PRODUCT LIMITS
+--------------------
+- Password strength is a local heuristic, not a breached-password database check.
+- BMI is an adult screening guide, not a diagnosis.
+- Tax, GST, salary and electricity calculators use user-provided rates; official rates do not auto-update.
+- JWT Decoder does not verify a token signature.
+- PDF text extraction/word count requires selectable text; scanned PDF pages need OCR.
+- JPG to Word uses English OCR and outputs Word-compatible HTML/.doc, not a layout-preserving DOCX.
+- PDF metadata cleanup targets common document information fields and cannot guarantee all XMP/custom metadata is erased.
+- QPDF/WASM, OCR, QR, spreadsheet and formatter functions need internet access to load public CDN libraries when first used.
+- Camera QR scanning requires HTTPS, browser support and camera permission.
+- Notepad autosave depends on browser localStorage; TXT download remains available if storage is blocked.
