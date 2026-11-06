@@ -1,0 +1,11 @@
+TOOLZEN UPGRADE — QUICK DEPLOY
+
+1) Extract this ZIP on your computer.
+2) Open the extracted folder and select all files inside it.
+3) GitHub: https://github.com/Abdul-wahab1101/toolzen-final
+4) Add file -> Upload files -> drag the extracted files.
+5) Commit changes.
+6) Wait until Cloudflare Pages latest deployment shows Success.
+7) Open https://toolzen-final.pages.dev/ and hard-refresh with Ctrl+Shift+R.
+
+Do not upload the ZIP itself. Do not delete the Google verification HTML file. Full limits and tool notes are in README-ROMAN-URDU.txt.
