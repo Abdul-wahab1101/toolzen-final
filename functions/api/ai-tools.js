@@ -16,14 +16,14 @@ export async function onRequestPost({ request, env }) {
   }
 
   const tool = String(body.tool || "");
-  const allowed = ["writing", "grammar", "cover", "summarize", "interview", "translate"];
+  const allowed = ["writing", "grammar", "cover", "summarize", "interview", "translate", "caption", "youtube", "email"];
   if (!allowed.includes(tool)) {
     return new Response(JSON.stringify({ error: "Unknown AI tool." }), { status: 400, headers: JSON_HEADERS });
   }
   const raw = body.fields && typeof body.fields === "object" ? body.fields : {};
   const clean = value => String(value || "").trim().slice(0, 5000);
   const fields = {};
-  for (const key of ["type", "tone", "details", "text", "mode", "name", "role", "company", "experience", "job", "style", "length", "level", "answer", "language", "source", "target"]) {
+  for (const key of ["type", "tone", "details", "text", "mode", "name", "role", "company", "experience", "job", "style", "length", "level", "answer", "language", "source", "target", "platform", "audience", "purpose", "recipient"]) {
     fields[key] = clean(raw[key]);
   }
 
@@ -48,6 +48,15 @@ export async function onRequestPost({ request, env }) {
     } else {
       instructions = `Create 8 realistic interview practice questions for the role ${fields.role}. Candidate level: ${fields.level || "Beginner / Fresher"}. Respond in ${fields.language || "English"}. Include a mix of common, role-specific and situational questions. For each, add a short note about what the interviewer wants to learn. Do not claim these are guaranteed or actual questions from a specific employer. Finish with 2 practical preparation tips.`;
     }
+  } else if (tool === "caption") {
+    if (!fields.details) return new Response(JSON.stringify({ error: "Describe the post or video first." }), { status: 400, headers: JSON_HEADERS });
+    instructions = `Create a platform-appropriate social media caption for ${fields.platform || "social media"}. Topic/content: ${fields.details}. Tone: ${fields.tone || "Friendly"}. Language: ${fields.language || "English"}. Return a ready-to-use caption followed by 5-10 relevant, specific hashtags. Avoid hashtag stuffing, fake claims, guaranteed reach promises and invented facts. Do not add a preamble.`;
+  } else if (tool === "youtube") {
+    if (!fields.topic || !fields.details) return new Response(JSON.stringify({ error: "Enter a video topic and its key points." }), { status: 400, headers: JSON_HEADERS });
+    instructions = `Act as a practical YouTube content assistant. Video topic: ${fields.topic}. Video content/key points: ${fields.details}. Target audience: ${fields.audience || "General viewers"}. Output language: ${fields.language || "English"}. Provide 5 accurate clickable title options, one clear description, a short list of relevant tags, and 3 follow-up video ideas. Do not invent video contents, results or claims. Avoid misleading clickbait and keyword stuffing. Clearly label each section.`;
+  } else if (tool === "email") {
+    if (!fields.purpose || !fields.details) return new Response(JSON.stringify({ error: "Enter the email purpose and key points." }), { status: 400, headers: JSON_HEADERS });
+    instructions = `Write a complete email in ${fields.language || "English"}. Purpose: ${fields.purpose}. Recipient: ${fields.recipient || "[Recipient]"}. Tone: ${fields.tone || "Professional"}. Include only these supplied facts and points: ${fields.details}. Start with a concise Subject: line, then greeting, email body and suitable sign-off. Use [Your Name] where sender name is missing. Never invent dates, credentials, promises or facts. Return only the editable email.`;
   } else if (tool === "translate") {
     if (!fields.text || !fields.target) return new Response(JSON.stringify({ error: "Enter text and choose the target language." }), { status: 400, headers: JSON_HEADERS });
     instructions = `Translate the text from ${fields.source || "Auto-detect"} into ${fields.target}. Style: ${fields.style || "Natural and conversational"}. Preserve meaning, names, numbers, paragraph breaks and formatting as much as possible. For Roman Urdu, use natural Latin-script Urdu rather than Devanagari. Do not summarize, explain or add commentary. If the source is ambiguous, choose the most likely meaning without inventing details. Return only the translation. Text:\\n${fields.text}`;
