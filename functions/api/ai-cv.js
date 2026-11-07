@@ -15,26 +15,28 @@ export async function onRequestPost({ request, env }) {
   }
   const clean = value => String(value || "").trim().slice(0, 1800);
   const data = {
-    name: clean(body.name), targetRole: clean(body.targetRole), title: clean(body.title),
-    location: clean(body.location), education: clean(body.education), experience: clean(body.experience),
-    skills: clean(body.skills), languages: clean(body.languages), extra: clean(body.extra)
+    name: clean(body.name), mode: body.mode === "summary" ? "summary" : "complete", currentSummary: clean(body.currentSummary),
+    targetRole: clean(body.targetRole), title: clean(body.title), location: clean(body.location),
+    education: clean(body.education), experience: clean(body.experience), skills: clean(body.skills),
+    languages: clean(body.languages), extra: clean(body.extra)
   };
-  if (!data.name || ![data.education, data.experience, data.skills, data.extra].some(Boolean)) {
-    return new Response(JSON.stringify({ error: "Enter your name and at least one education, experience, skill or personal detail." }), { status: 400, headers: JSON_HEADERS });
+  if (!data.name) {
+    return new Response(JSON.stringify({ error: "Enter your name first so AI can prepare your CV summary." }), { status: 400, headers: JSON_HEADERS });
   }
-  const prompt = `Create concise, professional English CV wording from the candidate's real details below.
+  const prompt = data.mode === "summary"
+    ? `Write a polished, concise professional CV summary in English. The candidate may provide only a name, or may provide additional facts. Return ONLY a valid JSON object with string keys: role, summary, experience, skills, languages. The summary must be 2-4 sentences, suitable for a CV and editable by the user. If only a name is provided, write a neutral entry-level/fresher profile that makes no claims about personality, skills, qualifications, experience or achievements. Do not repeat the name unnecessarily. If a target role is supplied, make the wording relevant to it without claiming experience. If the user supplied an existing summary, improve its wording while preserving its meaning. Never invent facts. Keep all other output fields empty. No markdown or commentary. Candidate details:\n${JSON.stringify(data)}`
+    : `Create concise, professional English CV wording from the candidate's real details below.
 Return ONLY a valid JSON object with these string keys: role, summary, experience, skills, languages.
 Rules:
 - Never invent employers, job titles, dates, degrees, certificates, achievements, language fluency, numbers or skills.
 - If the candidate has no work experience, keep experience as an empty string. Do not fabricate experience. You may write a suitable fresher summary.
 - Preserve the meaning of the supplied facts. Translate Roman Urdu or Urdu-style wording into clear English without adding facts.
-- Make the summary 2-4 sentences, tailored to the target role if supplied.
+- Make the summary 2-4 sentences, tailored to the target role if supplied. If only a name is provided, write a neutral entry-level profile with no unsupported personal claims.
 - Rephrase supplied experience into clear bullet-like lines, but only if actual experience was provided.
 - Keep skills limited to skills explicitly supplied or clearly evidenced by the candidate's own details. If uncertain, leave skills empty.
 - If no languages were provided, return an empty languages string.
 - Do not include markdown fences or commentary.
-Candidate details:
-${JSON.stringify(data)}`;
+Candidate details:\n${JSON.stringify(data)}`;
   let upstream;
   try {
     upstream = await fetch("https://api.groq.com/openai/v1/chat/completions", {
