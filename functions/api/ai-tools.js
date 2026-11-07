@@ -23,7 +23,7 @@ export async function onRequestPost({ request, env }) {
   const raw = body.fields && typeof body.fields === "object" ? body.fields : {};
   const clean = value => String(value || "").trim().slice(0, 5000);
   const fields = {};
-  for (const key of ["type", "tone", "details", "text", "mode", "name", "role", "company", "experience", "job", "style", "length", "level", "answer", "language", "source", "target", "platform", "audience", "purpose", "recipient", "message", "history"]) {
+  for (const key of ["type", "tone", "details", "text", "mode", "name", "role", "company", "experience", "job", "style", "length", "level", "answer", "language", "source", "target", "platform", "audience", "purpose", "recipient", "topic", "message", "history"]) {
     fields[key] = clean(raw[key]);
   }
 
