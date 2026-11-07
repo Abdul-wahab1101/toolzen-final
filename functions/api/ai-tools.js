@@ -16,14 +16,14 @@ export async function onRequestPost({ request, env }) {
   }
 
   const tool = String(body.tool || "");
-  const allowed = ["writing", "grammar", "cover"];
+  const allowed = ["writing", "grammar", "cover", "summarize", "interview", "translate"];
   if (!allowed.includes(tool)) {
     return new Response(JSON.stringify({ error: "Unknown AI tool." }), { status: 400, headers: JSON_HEADERS });
   }
   const raw = body.fields && typeof body.fields === "object" ? body.fields : {};
   const clean = value => String(value || "").trim().slice(0, 5000);
   const fields = {};
-  for (const key of ["type", "tone", "details", "text", "mode", "name", "role", "company", "experience", "job"]) {
+  for (const key of ["type", "tone", "details", "text", "mode", "name", "role", "company", "experience", "job", "style", "length", "level", "answer", "language", "source", "target"]) {
     fields[key] = clean(raw[key]);
   }
 
@@ -34,9 +34,23 @@ export async function onRequestPost({ request, env }) {
   } else if (tool === "grammar") {
     if (!fields.text) return new Response(JSON.stringify({ error: "Paste the text you want to improve." }), { status: 400, headers: JSON_HEADERS });
     instructions = `Task: ${fields.mode || "Fix grammar and spelling"}. Tone: ${fields.tone || "Keep original tone"}. Preserve the original meaning, facts, names, numbers and intent. Do not add new claims or remove important information. Return only the improved text, without explanations or quotation marks. Text:\\n${fields.text}`;
-  } else {
+  } else if (tool === "cover") {
     if (!fields.name || !fields.role || !fields.experience) return new Response(JSON.stringify({ error: "Enter your name, job title and real skills or experience." }), { status: 400, headers: JSON_HEADERS });
     instructions = `Write a concise, professional job application cover letter in English. Candidate name: ${fields.name}. Target job: ${fields.role}. Company: ${fields.company || "[Company Name]"}. Candidate's actual skills/experience: ${fields.experience}. Job requirements: ${fields.job || "Not provided"}. Only use facts explicitly supplied. Never invent employers, qualifications, years of experience, achievements, metrics or company facts. Connect the supplied skills to the role honestly. If a detail is missing, omit it or use a clear placeholder. Use a professional greeting and sign-off. Return the complete editable letter only.`;
+  } else if (tool === "summarize") {
+    if (!fields.text) return new Response(JSON.stringify({ error: "Paste the text you want summarized." }), { status: 400, headers: JSON_HEADERS });
+    instructions = `Summarize the supplied text as ${fields.style || "a short paragraph"} with a ${fields.length || "short"} level of detail. Preserve the source's key facts, names, numbers, caveats and meaning. Do not add information that is not in the source. If the source contains uncertainty, keep it. Use clear headings or bullets when appropriate. Return only the summary. Source text:\\n${fields.text}`;
+  } else if (tool === "interview") {
+    if (!fields.role) return new Response(JSON.stringify({ error: "Enter the job role you are preparing for." }), { status: 400, headers: JSON_HEADERS });
+    if (fields.mode === "Review my answer" && !fields.answer) return new Response(JSON.stringify({ error: "Paste your interview answer so it can be reviewed." }), { status: 400, headers: JSON_HEADERS });
+    if (fields.mode === "Review my answer") {
+      instructions = `Act as a supportive interview coach. Job role: ${fields.role}. Candidate level: ${fields.level || "Beginner / Fresher"}. Respond in ${fields.language || "English"}. Review this answer: ${fields.answer}. Give a brief assessment, what was good, what could improve, a stronger example answer that does not invent the candidate's experience, and one practical tip. Be kind, specific and constructive. Clearly label any sample wording as an example.`;
+    } else {
+      instructions = `Create 8 realistic interview practice questions for the role ${fields.role}. Candidate level: ${fields.level || "Beginner / Fresher"}. Respond in ${fields.language || "English"}. Include a mix of common, role-specific and situational questions. For each, add a short note about what the interviewer wants to learn. Do not claim these are guaranteed or actual questions from a specific employer. Finish with 2 practical preparation tips.`;
+    }
+  } else if (tool === "translate") {
+    if (!fields.text || !fields.target) return new Response(JSON.stringify({ error: "Enter text and choose the target language." }), { status: 400, headers: JSON_HEADERS });
+    instructions = `Translate the text from ${fields.source || "Auto-detect"} into ${fields.target}. Style: ${fields.style || "Natural and conversational"}. Preserve meaning, names, numbers, paragraph breaks and formatting as much as possible. For Roman Urdu, use natural Latin-script Urdu rather than Devanagari. Do not summarize, explain or add commentary. If the source is ambiguous, choose the most likely meaning without inventing details. Return only the translation. Text:\\n${fields.text}`;
   }
 
   let upstream;
