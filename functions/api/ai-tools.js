@@ -27,7 +27,8 @@ export async function onRequestPost({ request, env }) {
     fields[key] = clean(raw[key]);
   }
 
-  let instructions = "";\n  let chatbotMessages = null;
+  let instructions = "";
+  let chatbotMessages = null;
   if (tool === "writing") {
     if (!fields.details) return new Response(JSON.stringify({ error: "Describe what you want the AI to write." }), { status: 400, headers: JSON_HEADERS });
     instructions = `Write a useful, polished ${fields.type || "piece of content"} in a ${fields.tone || "clear"} tone using the user's instructions. Do not invent personal facts, dates, credentials, events, statistics or promises. If essential details are missing, use clearly marked neutral placeholders such as [Your Name] rather than making them up. Return the finished draft only, with no preamble. User instructions:\\n${fields.details}`;
