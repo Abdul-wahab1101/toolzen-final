@@ -567,7 +567,7 @@ async function runPdfTool(id,files){const PDFLib=await getPdfLib(),{PDFDocument,
 async function makeCV(){
  const v=id=>$(id)?.value?.trim()||'';
  if(!v('fullName'))throw Error('Enter your name first.');
- if(v('cvEmail')&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v('cvEmail')))throw Error('Enter a valid email address or leave the email field blank.');
+ if(v('cvEmail')&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('cvEmail')))throw Error('Enter a valid email address or leave the email field blank.');
  const sections=[
   ['PROFILE',v('cvSummary')],
   ['WORK EXPERIENCE',v('cvExperience')],
@@ -609,14 +609,28 @@ async function makeCV(){
   bold:{bg:[37,33,59],name:[255,255,255],sub:[225,217,244],accent:[224,164,88]}
  };
  const palette=palettes[template]||palettes.ats;
+ const headerTextW=cvPhotoData?maxW-34:maxW;
  doc.setFillColor(...palette.bg);doc.rect(0,0,pageW,48,'F');
  doc.setFillColor(...palette.accent);doc.rect(0,46,pageW,2,'F');
  doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(...palette.name);
- doc.text(doc.splitTextToSize(clean(v('fullName')),maxW),left,23);
+ doc.text(doc.splitTextToSize(clean(v('fullName')),headerTextW),left,23);
  doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...palette.sub);
- if(v('cvRole'))doc.text(doc.splitTextToSize(clean(v('cvRole')),maxW),left,31);
+ if(v('cvRole'))doc.text(doc.splitTextToSize(clean(v('cvRole')),headerTextW),left,31);
  const contact=[v('cvEmail'),v('cvPhone'),v('cvLocation'),v('cvLinks')].filter(Boolean).join('  |  ');
- if(contact){doc.setFontSize(8.5);doc.text(doc.splitTextToSize(clean(contact),maxW),left,40)}
+ if(contact){doc.setFontSize(8.5);doc.text(doc.splitTextToSize(clean(contact),headerTextW),left,40)}
+ if(cvPhotoData){
+  const photo=new Image();
+  await new Promise((resolve,reject)=>{
+   photo.onload=resolve;
+   photo.onerror=()=>reject(new Error('The selected profile photo could not be prepared for PDF export. Please choose another image.'));
+   photo.src=cvPhotoData;
+  });
+  const side=512,canvas=freshCanvas(side,side),ctx=canvas.getContext('2d');
+  const crop=Math.min(photo.naturalWidth,photo.naturalHeight);
+  const sx=(photo.naturalWidth-crop)/2,sy=(photo.naturalHeight-crop)/2;
+  ctx.drawImage(photo,sx,sy,crop,crop,0,0,side,side);
+  doc.addImage(canvas,'PNG',pageW-right-28,9,28,28);
+ }
  y=61;
  for(const [heading,content] of sections){addHeading(heading);addText(content,9.5,'normal',[48,61,80],1.5)}
  const blob=doc.output('blob');
