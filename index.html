@@ -175,7 +175,10 @@ body[data-theme="light"] .aiStudioTag,body[data-theme="light"] .cardCategory{col
 body[data-theme="light"] .toolCount,body[data-theme="light"] .personalHint{color:#52617a}
 body[data-theme="light"] .toast{color:#fff}
 body[data-theme="light"] .infoPage,body[data-theme="light"] #infoPage{color:#182238}
-body[data-theme="light"] .infoPage p,body[data-theme="light"] #infoPage p,body[data-theme="light"] #infoPage li{color:#52617a}@media(max-width:680px){.workHeadActions{gap:5px}.shareTool{padding:7px 9px;font-size:11px}.backTop{right:13px;bottom:13px}}</style>
+body[data-theme="light"] .infoPage p,body[data-theme="light"] #infoPage p,body[data-theme="light"] #infoPage li{color:#52617a}@media(max-width:680px){.workHeadActions{gap:5px}.shareTool{padding:7px 9px;font-size:11px}.backTop{right:13px;bottom:13px}}
+/* CV Maker user-selected typography and accent */
+.cvPreview.resume{font-family:var(--cv-font,Arial,sans-serif)}.cvPreview.resume .resumeHeader,.cvPreview.resume .resumeBody{font-family:var(--cv-font,Arial,sans-serif)}.cvPreview.resume .resumeSection h2{color:var(--cv-accent,#596985);border-bottom-color:color-mix(in srgb,var(--cv-accent,#596985) 30%,#dce3ec)}.cvPreview.resume .resumeSkills span{border-color:color-mix(in srgb,var(--cv-accent,#596985) 25%,#d9e3ef)}.cvPreview.resume .resumePhoto.photo-top{object-position:center top}.cvPreview.resume .resumePhoto.photo-center{object-position:center center}#cvAccent{width:100%;height:42px;padding:4px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -385,7 +388,7 @@ case'rotatepdf':return field('angle','Rotation',select('angle',[['90','90° cloc
 case'pdfjpg':return field('pages','Pages to convert',input('pages','text','1-3','placeholder="1-3 or 1,3,5"'))+field('scale','Render resolution',select('scale',[['1','Standard'],['1.5','High'],['2','Very high']]),'Creates a ZIP for multiple selected pages.');
 case'pdfinfo':return '<p class="help">Reads page count, page sizes and available PDF metadata.</p>';
 case'pdfwatermark':return field('watermarkText','Watermark text',input('watermarkText','text','ToolZen','maxlength="60"'))+field('opacity','Opacity',input('opacity','range','18','min="5" max="60"'))+field('fontSize','Font size',input('fontSize','number','30','min="8" max="100"'));
-case'cv':return field('cvTemplate','Choose a premium CV design',select('cvTemplate',[['ats','ATS Pro · Clean'],['modern','Modern Sidebar'],['executive','Executive Teal'],['swiss','Swiss Editorial'],['elegant','Elegant Serif'],['classic','Classic Formal'],['minimal','Minimal Clean'],['compact','One-page Compact'],['bold','Bold Creative']]))+field('fullName','Full name',input('fullName','text','','placeholder="Your full name"'))+field('cvTargetRole','Job you want to apply for',input('cvTargetRole','text','','placeholder="e.g. Office assistant, Sales representative"'))+field('cvRole','Professional title',input('cvRole','text','','placeholder="e.g. Customer Support Representative"'))+field('cvEmail','Email',input('cvEmail','email','','placeholder="you@example.com"'))+field('cvPhone','Phone',input('cvPhone','tel','','placeholder="+92 3XX XXXXXXX"'))+field('cvLocation','Location',input('cvLocation','text','','placeholder="City, Country"'))+field('cvPhoto','Profile photo','<input id="cvPhoto" type="file" accept="image/*">','Optional. Use a clear professional headshot.')+field('cvSummary','Professional summary','<textarea id="cvSummary" placeholder="Leave blank and let AI create a professional summary. You can edit every word."></textarea><div class="cvAiActions"><button class="btn secondary" type="button" id="aiSummaryBtn">✨ Generate / Rewrite Summary</button><span class="status" id="aiSummaryStatus" role="status">Enter your name to get a first draft, then edit it freely.</span></div>')+field('cvExperience','Work experience','<textarea id="cvExperience" placeholder="Job title | Company | Dates\nYour real duties or achievements. Leave blank if you are a fresher."></textarea>')+field('cvEducation','Education','<textarea id="cvEducation" placeholder="Qualification | Institute | Year"></textarea>')+field('cvSkills','Skills','<textarea id="cvSkills" placeholder="Your skills, separated with commas"></textarea>')+field('cvLanguages','Languages','<input id="cvLanguages" placeholder="English, Urdu">')+field('cvExtra','A few more details (optional)','<textarea id="cvExtra" placeholder="In simple English or Roman Urdu, tell us about yourself, courses, strengths or projects. Do not include passwords or ID numbers."></textarea>')+field('cvLinks','Portfolio / LinkedIn','<input id="cvLinks" placeholder="https://...">')+'<div class="aiCvPanel"><div><strong>✨ AI CV Assistant</strong><p class="help">Enter just your name for a starter summary, or add your real education, skills and experience for a more tailored CV. Edit every AI suggestion before downloading.</p></div><button class="btn secondary" type="button" id="aiCvBtn">✨ Complete my CV with AI</button><span class="status" id="aiCvStatus" role="status">You can start with only your name.</span></div><p class="help">Your details are sent securely to the AI service only when you press the AI button. Review every suggestion before applying. A photo is optional.</p>';
+case'cv':return field('cvTemplate','Choose a premium CV design',select('cvTemplate',[['ats','ATS Pro · Clean'],['modern','Modern Sidebar'],['executive','Executive Teal'],['swiss','Swiss Editorial'],['elegant','Elegant Serif'],['classic','Classic Formal'],['minimal','Minimal Clean'],['compact','One-page Compact'],['bold','Bold Creative']]))+field('cvFont','CV font style',select('cvFont',[['Arial','Clean sans-serif'],['Georgia','Classic serif'],['Times New Roman','Formal serif'],['Verdana','Modern readable']]))+field('cvAccent','Accent colour','<input id="cvAccent" type="color" value="#8171f5">','Choose a highlight colour for section headings and template accents.')+field('cvPhotoPosition','Profile photo position',select('cvPhotoPosition',[['center','Center crop'],['top','Top aligned crop']]),'Optional profile photo crop alignment.')+field('fullName','Full name',input('fullName','text','','placeholder="Your full name"'))+field('cvTargetRole','Job you want to apply for',input('cvTargetRole','text','','placeholder="e.g. Office assistant, Sales representative"'))+field('cvRole','Professional title',input('cvRole','text','','placeholder="e.g. Customer Support Representative"'))+field('cvEmail','Email',input('cvEmail','email','','placeholder="you@example.com"'))+field('cvPhone','Phone',input('cvPhone','tel','','placeholder="+92 3XX XXXXXXX"'))+field('cvLocation','Location',input('cvLocation','text','','placeholder="City, Country"'))+field('cvPhoto','Profile photo','<input id="cvPhoto" type="file" accept="image/*">','Optional. Use a clear professional headshot.')+field('cvSummary','Professional summary','<textarea id="cvSummary" placeholder="Leave blank and let AI create a professional summary. You can edit every word."></textarea><div class="cvAiActions"><button class="btn secondary" type="button" id="aiSummaryBtn">✨ Generate / Rewrite Summary</button><span class="status" id="aiSummaryStatus" role="status">Enter your name to get a first draft, then edit it freely.</span></div>')+field('cvExperience','Work experience','<textarea id="cvExperience" placeholder="Job title | Company | Dates\nYour real duties or achievements. Leave blank if you are a fresher."></textarea>')+field('cvEducation','Education','<textarea id="cvEducation" placeholder="Qualification | Institute | Year"></textarea>')+field('cvSkills','Skills','<textarea id="cvSkills" placeholder="Your skills, separated with commas"></textarea>')+field('cvLanguages','Languages','<input id="cvLanguages" placeholder="English, Urdu">')+field('cvExtra','A few more details (optional)','<textarea id="cvExtra" placeholder="In simple English or Roman Urdu, tell us about yourself, courses, strengths or projects. Do not include passwords or ID numbers."></textarea>')+field('cvLinks','Portfolio / LinkedIn','<input id="cvLinks" placeholder="https://...">')+'<div class="aiCvPanel"><div><strong>✨ AI CV Assistant</strong><p class="help">Enter just your name for a starter summary, or add your real education, skills and experience for a more tailored CV. Edit every AI suggestion before downloading.</p></div><button class="btn secondary" type="button" id="aiCvBtn">✨ Complete my CV with AI</button><span class="status" id="aiCvStatus" role="status">You can start with only your name.</span></div><p class="help">Your details are sent securely to the AI service only when you press the AI button. Review every suggestion before applying. A photo is optional.</p>';
 case'scanner':return `<div class="scannerTools">${field('scanFilter','Document filter',select('scanFilter',[['color','Original colour'],['gray','Grayscale'],['bw','Adaptive black & white']]))}${field('scanMargin','Crop margin (%)',input('scanMargin','number','2','min="0" max="20"'))}</div><p class="help">Create a multi-page A4 PDF from selected images or camera captures. Manual crop margin and enhancement filters are included. Automatic edge detection and OCR are not included in this version.</p>`;
 case'pdfword':return '<p class="help">Extracts selectable PDF text into DOCX. Complex layout, tables, images and scanned-page OCR are not preserved.</p>';
 case'wordpdf':return '<p class="help">Converts DOCX text and common formatting. Complex layouts may change; review the exported PDF before use.</p>';
@@ -422,7 +425,7 @@ function bindToolUI(id){
  if(id==='convert')$('qualityPref').oninput=()=>{$('qualityValue').textContent=$('qualityPref').value+'%'};
  if(id==='passport')$('photoPreset').onchange=()=>{const p=$('photoPreset').value;if(p!=='custom'){const [w,h]=p.split('x');$('photoW').value=w;$('photoH').value=h}};
  if(id==='frombase64'&&$('chooseFile'))$('chooseFile').disabled=true;
- if(id==='cv'){const ids=['fullName','cvRole','cvEmail','cvPhone','cvLocation','cvSummary','cvExperience','cvEducation','cvSkills','cvLanguages','cvLinks','cvTemplate'];ids.forEach(x=>$(x)?.addEventListener('input',renderCV));$('cvPhoto').onchange=async()=>{const f=$('cvPhoto').files[0];if(!f){cvPhotoData='';renderCV();return}if(!f.type.startsWith('image/')){showError('Choose an image for your CV photo.');return}if(f.size>5*1024*1024){showError('CV profile photo must be 5 MB or smaller.');return}cvPhotoData=await fileAsDataURL(f);renderCV()};$('aiCvBtn')?.addEventListener('click',enhanceCVWithAI);$('aiSummaryBtn')?.addEventListener('click',generateCVSummaryWithAI);renderCV()}
+ if(id==='cv'){const ids=['fullName','cvRole','cvEmail','cvPhone','cvLocation','cvSummary','cvExperience','cvEducation','cvSkills','cvLanguages','cvLinks','cvTemplate','cvFont','cvAccent','cvPhotoPosition'];ids.forEach(x=>{const el=$(x);el?.addEventListener('input',renderCV);el?.addEventListener('change',renderCV)});$('cvPhoto').onchange=async()=>{const f=$('cvPhoto').files[0];if(!f){cvPhotoData='';renderCV();return}if(!f.type.startsWith('image/')){showError('Choose an image for your CV photo.');return}if(f.size>5*1024*1024){showError('CV profile photo must be 5 MB or smaller.');return}cvPhotoData=await fileAsDataURL(f);renderCV()};$('aiCvBtn')?.addEventListener('click',enhanceCVWithAI);$('aiSummaryBtn')?.addEventListener('click',generateCVSummaryWithAI);renderCV()}
  if(id==='scanner')bindScanner();
  if(id==='merge')renderFileQueue();
 }
@@ -486,15 +489,15 @@ async function generateCVSummaryWithAI(){
  finally{btn.disabled=false}
 }
 function renderCV(){
- const v=id=>$(id)?.value?.trim()||'',template=v('cvTemplate')||'modern',name=esc(v('fullName')||'Your Name'),role=esc(v('cvRole')||'Professional title');
+ const v=id=>$(id)?.value?.trim()||'',template=v('cvTemplate')||'modern',name=esc(v('fullName')||'Your Name'),role=esc(v('cvRole')||'Professional title'),font=v('cvFont')||'Arial',accent=v('cvAccent')||'#8171f5',photoPosition=v('cvPhotoPosition')||'center';
  const line=(key)=>esc(v(key)).replace(/\n/g,'<br>');
  const section=(title,content)=>content?`<section class="resumeSection"><h2>${title}</h2><p>${content}</p></section>`:'';
  const skills=v('cvSkills').split(/[\n,]/).map(x=>x.trim()).filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join('');
- const photo=cvPhotoData?`<img class="resumePhoto" src="${cvPhotoData}" alt="Profile photo">`:'';
+ const photo=cvPhotoData?`<img class="resumePhoto photo-${photoPosition}" src="${cvPhotoData}" alt="Profile photo">`:'';
  const contact=[v('cvEmail'),v('cvPhone'),v('cvLocation'),v('cvLinks')].filter(Boolean).map(esc).join(' · ');
  const langs=v('cvLanguages')?`<section class="resumeSection"><h2>Languages</h2><p>${line('cvLanguages')}</p></section>`:'';
  const html=`<div class="resumeHeader">${photo}<h1>${name}</h1><div class="resumeRole">${role}</div><div class="resumeContact">${contact}</div></div><div class="resumeBody">${section('Profile',line('cvSummary'))}${section('Experience',line('cvExperience'))}${section('Education',line('cvEducation'))}${skills?`<section class="resumeSection"><h2>Core skills</h2><div class="resumeSkills">${skills}</div></section>`:''}${langs}</div>`;
- const preview=$('cvPreview');if(preview){preview.className='cvPreview resume template-'+template;preview.innerHTML=html}
+ const preview=$('cvPreview');if(preview){preview.className='cvPreview resume template-'+template;preview.style.setProperty('--cv-accent',accent);preview.style.setProperty('--cv-font',JSON.stringify(font));preview.innerHTML=html}
 }
 
 
@@ -587,7 +590,7 @@ async function makeCV(){
  let y=22;
  const clean=s=>String(s||'').replace(/[•●▪]/g,'-').replace(/\r/g,'').trim();
  const addText=(text,size=10,style='normal',color=[48,61,80],gap=1.4)=>{
-  doc.setFont('helvetica',style);doc.setFontSize(size);doc.setTextColor(...color);
+  doc.setFont(pdfFont,style);doc.setFontSize(size);doc.setTextColor(...color);
   const lines=doc.splitTextToSize(clean(text),maxW);
   for(const line of lines){
    if(y>pageH-18){doc.addPage();y=20}
@@ -597,10 +600,14 @@ async function makeCV(){
  };
  const addHeading=(label)=>{
   if(y>pageH-28){doc.addPage();y=20}
-  y+=2;doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...palette.accent);doc.text(label,left,y);y+=2;
+  y+=2;doc.setFont(pdfFont,'bold');doc.setFontSize(10);doc.setTextColor(...palette.accent);doc.text(label,left,y);y+=2;
   doc.setDrawColor(...palette.accent);doc.line(left,y,pageW-right,y);y+=6;
  };
  const template=v('cvTemplate')||'ats';
+ const font=v('cvFont')||'Arial';
+ const accentHex=v('cvAccent')||'#8171f5';
+ const accentRgb=accentHex.match(/^#([0-9a-f]{6})$/i)?.[1];
+ const accentColor=accentRgb?[parseInt(accentRgb.slice(0,2),16),parseInt(accentRgb.slice(2,4),16),parseInt(accentRgb.slice(4,6),16)]:[129,113,245];
  const palettes={
   ats:{bg:[255,255,255],name:[25,35,50],sub:[75,85,99],accent:[35,48,65]},
   modern:{bg:[24,40,69],name:[255,255,255],sub:[210,222,240],accent:[129,113,245]},
@@ -613,12 +620,15 @@ async function makeCV(){
   bold:{bg:[37,33,59],name:[255,255,255],sub:[225,217,244],accent:[224,164,88]}
  };
  const palette=palettes[template]||palettes.ats;
+ palette.accent=accentColor;
+ const fontMap={'Arial':'helvetica','Georgia':'times','Times New Roman':'times','Verdana':'helvetica'};
+ const pdfFont=fontMap[font]||'helvetica';
  const headerTextW=cvPhotoData?maxW-34:maxW;
  doc.setFillColor(...palette.bg);doc.rect(0,0,pageW,48,'F');
  doc.setFillColor(...palette.accent);doc.rect(0,46,pageW,2,'F');
- doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(...palette.name);
+ doc.setFont(pdfFont,'bold');doc.setFontSize(22);doc.setTextColor(...palette.name);
  doc.text(doc.splitTextToSize(clean(v('fullName')),headerTextW),left,23);
- doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...palette.sub);
+ doc.setFont(pdfFont,'normal');doc.setFontSize(11);doc.setTextColor(...palette.sub);
  if(v('cvRole'))doc.text(doc.splitTextToSize(clean(v('cvRole')),headerTextW),left,31);
  const contact=[v('cvEmail'),v('cvPhone'),v('cvLocation'),v('cvLinks')].filter(Boolean).join('  |  ');
  if(contact){doc.setFontSize(8.5);doc.text(doc.splitTextToSize(clean(contact),headerTextW),left,40)}
@@ -631,12 +641,12 @@ async function makeCV(){
   });
   const side=512,canvas=freshCanvas(side,side),ctx=canvas.getContext('2d');
   const crop=Math.min(photo.naturalWidth,photo.naturalHeight);
-  const sx=(photo.naturalWidth-crop)/2,sy=(photo.naturalHeight-crop)/2;
+  const sx=(photo.naturalWidth-crop)/2,sy=(v('cvPhotoPosition')==='top'?0:(photo.naturalHeight-crop)/2);
   ctx.drawImage(photo,sx,sy,crop,crop,0,0,side,side);
   doc.addImage(canvas,'PNG',pageW-right-28,9,28,28);
  }
  y=61;
- for(const [heading,content] of sections){addHeading(heading);addText(content,9.5,'normal',[48,61,80],1.5)}
+ for(const [heading,content] of sections){addHeading(heading);doc.setFont(pdfFont,'normal');addText(content,9.5,'normal',[48,61,80],1.5)}
  const blob=doc.output('blob');
  if(!blob||blob.size<1200)throw Error('CV PDF could not be created. Please try again.');
  addOutput(blob,'ToolZen-CV.pdf','Your CV PDF has been generated with selectable text. Open it and review all details before applying.');
